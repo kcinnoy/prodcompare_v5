@@ -1,45 +1,30 @@
-import React, { useEffect, useRef } from 'react'
 import * as d3 from 'd3'
 
-import ebayFetch from '../../modules/ebay-fetch'
+export default function BarChart( id, data ) {
 
-const width = 700, height = 500;
+  const width = 700, height = 500;
+  const svg = d3.select(id).append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .style("margin-left", 100);
 
-export default function BarChart({ data }) {
-  const ref = useRef()
+  svg.selectAll("rect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("x", (d, i) => i * 70)
+    .attr("y", (d, i) => height - d)
+    .attr("width", 65)
+    .attr("height", (d, i) => d * 10)
+    .attr("fill", "green")
 
-  useEffect(() => {
-    console.dir(data)
-    drawChart(data)
-  }, [data])
+  svg.selectAll("text")
+  .append("svg")
+    .data(data)
+    .enter()
+    .append("text")
+    .text((d) => d)
+    .attr("x", (d, i) => i * 70)
+    .attr("y", (d, i) => height - (10 * d) - 3)
 
-  function drawChart(data) {
-    
-    const prices = data.map(price => parseFloat(price.value))
-    const g = d3.select(ref.current)
-    
-    g.exit().remove();
-
-    g.selectAll("rect")
-      .data(prices)
-      .enter()
-      .append("rect")
-      .attr("x", (d, i) => i * 70)
-      .attr("y", (d, i) => height - d)
-      .attr("width", 65)
-      .attr("height", (d, i) => d * 10)
-      .attr("fill", "green")
-
-    g.selectAll("text")
-      .data(prices)
-      .enter()
-      .append("text")
-      .text((d) => d)
-      .attr("x", (d, i) => i * 70)
-      .attr("y", (d, i) => height - (10 * d) - 3)
-  }
-
-  return <svg width={width} height={height}>
-    <g ref={ref} />
-  </svg>
 }
