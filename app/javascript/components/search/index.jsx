@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import ebayFetch from '../../modules/ebay-fetch'
-import Result from "../Results"
-import Chart from "../charts/barChart"
-
-
+import Result from "./results"
+import Chart from "../charts/bar"
 
 export default function Search({}) {
   const [query, setQuery] = useState('')
@@ -11,9 +9,9 @@ export default function Search({}) {
 
   function handleSubmit(e) {
     e.preventDefault()
-    ebayFetch(`item_summary/search?q=${query}`)
+    ebayFetch(`item_summary/search?q=${query}&limit=10`)
     .then(json => {
-      setResults(json.itemSummaries)
+      setResults(json.itemSummaries || [])
     })
   }
 
@@ -23,8 +21,8 @@ export default function Search({}) {
         <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
         <input type="submit" value="Search" />
       </form>
-      <Result items={results} />
-      <Chart />
+      
+      <Chart data={results.map(item => item.price)} />
     </div>
   )
 }
