@@ -1,5 +1,9 @@
 import React, { useState } from 'react'
 import ebayFetch from '../../modules/ebay-fetch'
+import Result from "../Results"
+import Chart from "../charts/barChart"
+
+
 
 export default function Search({}) {
   const [query, setQuery] = useState('')
@@ -13,21 +17,14 @@ export default function Search({}) {
     })
   }
 
-  return <div>
-    <form onSubmit={handleSubmit}>
-      <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
-      <input type="submit" value="Search" />
-    </form>
-
-    
-
+  return (
     <div>
-      {
-        results.map(item => <div>
-          <div>{item.title}</div>
-        </div>)
-      }
+      <form onSubmit={handleSubmit}>
+        <input type="text" value={query} onChange={(e) => setQuery(e.target.value)} />
+        <input type="submit" value="Search" />
+      </form>
+      <Result items={results} />
+      <Chart />
     </div>
-
-  </div>
+  )
 }
